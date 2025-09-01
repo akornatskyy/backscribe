@@ -1,0 +1,16 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["backscribe.json", ".backscribe.json"],
+      "url": "./backscribe.schema.json"
+    }
+  ],
+  "yaml.schemas": {
+    "./backscribe.schema.json": [
+      "backscribe.yaml",
+      "backscribe.yml",
+      ".backscribe.yaml",
+      ".backscribe.yml"
+    ]
+  }
+}

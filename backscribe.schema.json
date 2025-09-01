@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "Backscribe configuration file schema for defining archive groups and their operations.",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional link to the JSON schema for validation."
+    },
+    "groups": {
+      "type": "array",
+      "description": "List of groups, each containing one or more archive definitions.",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "archives"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the group. Used as an identifier."
+          },
+          "skip": {
+            "type": "boolean",
+            "description": "If true, this group will be skipped during processing."
+          },
+          "archives": {
+            "type": "array",
+            "description": "List of operations to perform within the group.",
+            "items": {
+              "type": "object",
+              "description": "Definition of a single archive (7z, tar) or copy (cp) operation.",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "name",
+                    "files"
+                  ],
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "7z"
+                      ],
+                      "description": "Specifies a 7z archive operation."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the resulting archive file."
+                    },
+                    "files": {
+                      "type": "array",
+                      "description": "List of file paths to include in the archive.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude": {
+                      "type": "array",
+                      "description": "List of file paths or patterns to exclude.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rexclude": {
+                      "type": "array",
+                      "description": "List of recursive file paths to exclude.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "copy": {
+                      "type": "array",
+                      "description": "List of files to copy after archiving.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "method": {
+                      "type": "object",
+                      "description": "Compression method settings for 7z.",
+                      "properties": {
+                        "level": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 9,
+                          "description": "Compression level from 0 (no compression) to 9 (maximum)."
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "name",
+                    "files"
+                  ],
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "tar"
+                      ],
+                      "description": "Specifies a tar archive operation."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the resulting tar archive."
+                    },
+                    "files": {
+                      "type": "array",
+                      "description": "List of file paths to include in the tar archive.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude": {
+                      "type": "array",
+                      "description": "List of file paths or patterns to exclude.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "rexclude": {
+                      "type": "array",
+                      "description": "List of recursive file paths to exclude.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "copy": {
+                      "type": "array",
+                      "description": "List of files to copy after archiving.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "name",
+                    "src"
+                  ],
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "cp"
+                      ],
+                      "description": "Specifies a file copy operation."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the copy operation for identification."
+                    },
+                    "src": {
+                      "type": "array",
+                      "description": "List of source file paths to be copied.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "dst": {
+                      "type": "string",
+                      "description": "Destination path where files should be copied."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "groups"
+  ],
+  "additionalProperties": false
+}
