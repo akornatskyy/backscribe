@@ -1,5 +1,7 @@
 # backscribe
 
+[![tests](https://github.com/akornatskyy/backscribe/actions/workflows/tests.yml/badge.svg)](https://github.com/akornatskyy/backscribe/actions/workflows/tests.yml)
+
 🔄Backup + 📝scribe (a shell script writer).
 
 `backscribe` is a flexible command generator for archiving, copying, and backing up files using a structured configuration definitions.
