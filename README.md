@@ -2,17 +2,13 @@
 
 [![tests](https://github.com/akornatskyy/backscribe/actions/workflows/tests.yml/badge.svg)](https://github.com/akornatskyy/backscribe/actions/workflows/tests.yml)
 
-🔄Backup + 📝scribe (a shell script writer).
-
-`backscribe` is a flexible command generator for archiving, copying, and backing up files using a structured configuration definitions.
-
-It outputs a series of shell commands that you can review or pipe directly into your shell (e.g., via `sh` or `bash`).
+*Backscribe* is a flexible command generator for archiving, copying, and backing up files using a structured configuration definitions. It outputs a series of shell commands that you can review or pipe directly into your shell (e.g., via `sh` or `bash`).
 
 ---
 
 ## Usage
 
-```sh
+```text
 Usage:
   backscribe [options]
 
@@ -39,10 +35,8 @@ The 7z ([7-Zip](https://sourceforge.net/projects/sevenzip/files/7-Zip/)) command
 
 If no config is specified, `backscribe` searches upward from the current directory for:
 
-```txt
-backscribe.{yaml,yml,json}
-.backscribe.{yaml,yml,json}
-```
+- backscribe.{yaml,yml,json}
+- .backscribe.{yaml,yml,json}
 
 It also checks `$HOME` and `$HOME/.config` directories.
 
