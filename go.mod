@@ -1,4 +1,4 @@
-module backscribe
+module github.com/akornatskyy/backscribe
 
 go 1.25
 
