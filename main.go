@@ -16,11 +16,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	if opts.ShowHelp {
-		cli.PrintUsage()
-		os.Exit(0)
-	}
-
 	configFile, err := config.ResolveConfigFile(opts.ConfigFile)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error locating config file:", err)
