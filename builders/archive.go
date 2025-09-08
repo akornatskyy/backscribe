@@ -6,6 +6,10 @@ import (
 )
 
 func BuildArchive(archive domain.Archive, group domain.Group) string {
+	if len(archive.Files) == 0 {
+		return ""
+	}
+
 	switch archive.Type {
 	case "7z":
 		return archivers.Build7z(archive, group)

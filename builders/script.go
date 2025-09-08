@@ -44,6 +44,7 @@ mkdir -p "${DEST_DIR}"
 		prefix := ""
 		if group.Skip {
 			prefix = "# "
+			src = append(src, fmt.Sprintf("\nlog '\\e[36m⚬\\e[0m %s'", group.Name))
 		}
 		src = append(src, fmt.Sprintf("\n%sbackup_%s", prefix, group.Name))
 	}

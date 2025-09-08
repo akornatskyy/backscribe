@@ -148,7 +148,7 @@
                   "required": [
                     "type",
                     "name",
-                    "src"
+                    "files"
                   ],
                   "properties": {
                     "type": {
@@ -159,18 +159,14 @@
                     },
                     "name": {
                       "type": "string",
-                      "description": "Name of the copy operation for identification."
+                      "description": "Name of the resulting directory."
                     },
-                    "src": {
+                    "files": {
                       "type": "array",
-                      "description": "List of source file paths to be copied.",
+                      "description": "List of file paths to copy.",
                       "items": {
                         "type": "string"
                       }
-                    },
-                    "dst": {
-                      "type": "string",
-                      "description": "Destination path where files should be copied."
                     }
                   },
                   "additionalProperties": false
