@@ -56,7 +56,7 @@ Description:
 Options:
   -c, --config <file>   Optional path to a config file
   -h, --help            Show this help message
-	-v, --version         Show version
+  -v, --version         Show version
 
 Examples:
   backscribe -c ./config/backscribe.yaml | sh

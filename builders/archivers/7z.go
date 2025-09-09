@@ -72,11 +72,6 @@ func Build7z(archive domain.Archive, group domain.Group) string {
 				filesAndExcludes = append(filesAndExcludes, "-xr!"+helpers.Quote(x))
 			}
 		}
-		if archive.Copy != nil {
-			for _, x := range archive.Copy {
-				filesAndExcludes = append(filesAndExcludes, "-ir!"+helpers.Quote(x))
-			}
-		}
 
 		src = append(src, strings.Join(filesAndExcludes, " \\\n      "))
 	}

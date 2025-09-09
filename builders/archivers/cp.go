@@ -15,12 +15,12 @@ func BuildCopy(archive domain.Archive, group domain.Group) string {
 	}
 
 	return fmt.Sprintf(`
-	if [ ! -d "${DEST_DIR}/%s" ]; then
-  	log '\e[32m▶\e[0m [cp] %s => %s'
-		mkdir -p "${DEST_DIR}/%s"
-  	cp -a -n -t "${DEST_DIR}/%s" \
-			%s
-	else
+  if [ ! -d "${DEST_DIR}/%s" ]; then
+    log '\e[32m▶\e[0m %s => %s'
+    mkdir -p "${DEST_DIR}/%s"
+    cp -a -n -t "${DEST_DIR}/%s" \
+      %s
+  else
     log '\e[33m↷\e[0m %s => %s'
   fi
 `, archive.Name,
