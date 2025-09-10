@@ -2,9 +2,7 @@
 
 [![tests](https://github.com/akornatskyy/backscribe/actions/workflows/tests.yml/badge.svg)](https://github.com/akornatskyy/backscribe/actions/workflows/tests.yml)
 
-*Backscribe* is a flexible command generator for archiving, copying, and backing up files using a structured configuration definitions. It outputs a series of shell commands that you can review or pipe directly into your shell (e.g., via `sh` or `bash`).
-
----
+*Backscribe* is a flexible command generator for archiving, copying, and backing up files, driven by structured configuration definitions. It outputs a series of shell commands that you can review or pipe directly into your shell (e.g., via `sh` or `bash`).
 
 ## Usage
 
@@ -14,13 +12,14 @@ Usage:
 
 Description:
   backscribe generates a sequence of shell commands based on a configuration.
-  If no configuration file is specified, it searches upward from the current directory
-  for a file named '[.]backscribe.(yaml|json)'.
+  If no configuration file is specified, it searches upward from the current
+  directory for a file named '[.]backscribe.(yaml|json)'.
   Also checks $HOME and $HOME/.config
 
 Options:
   -c, --config <file>   Optional path to a config file
-  -h, --help            Show this help message and exit
+  -h, --help            Show this help message
+  -v, --version         Show version
 
 Examples:
   backscribe -c ./config/backscribe.yaml | sh
@@ -109,5 +108,5 @@ See `.vscode/settings.json` for enabling schema validation, auto-completion, and
 ```sh
 git clone https://github.com/akornatskyy/backscribe.git
 cd backscribe
-go build -ldflags="-s -w"
+go build
 ```
