@@ -71,13 +71,6 @@
                         "type": "string"
                       }
                     },
-                    "copy": {
-                      "type": "array",
-                      "description": "List of files to copy after archiving.",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
                     "method": {
                       "type": "object",
                       "description": "Compression method settings for 7z.",

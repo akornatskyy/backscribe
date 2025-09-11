@@ -17,7 +17,6 @@ type Archive struct {
 	Files    []string `json:"files" yaml:"files"`
 	Exclude  []string `json:"exclude,omitempty" yaml:"exclude,omitempty"`
 	Rexclude []string `json:"rexclude,omitempty" yaml:"rexclude,omitempty"`
-	Copy     []string `json:"copy,omitempty" yaml:"copy,omitempty"`
 }
 
 type Method struct {
