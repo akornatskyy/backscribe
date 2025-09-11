@@ -11,10 +11,12 @@ import (
 func BuildScript(config *domain.Config, configFile string) string {
 	src := []string{`#!/bin/sh
 set -o errexit
+# set -o xtrace
 `}
 	src = append(src, fmt.Sprintf(`
 CONFIG_FILE=%s
-DEST_DIR=~/backups/$(date '+%%Y-%%m-%%d')
+H=$(cd ~ ; (pwd -W 2>/dev/null || pwd) | sed 's/:\//:\/\//')
+DEST_DIR="${H}/backups/$(date '+%%Y-%%m-%%d')"
 START=$(date +%%s)
 `, strconv.Quote(configFile)))
 	src = append(src, `
