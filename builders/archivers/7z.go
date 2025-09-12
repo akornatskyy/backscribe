@@ -9,23 +9,6 @@ import (
 )
 
 func Build7z(archive domain.Archive, group domain.Group) string {
-	var src []string
-
-	options := []string{"-t7z", "-bso0"}
-	if archive.Method != nil && archive.Method.Level != nil {
-		options = append(options, fmt.Sprintf("-mx%d", *archive.Method.Level))
-	}
-
-	src = append(src, fmt.Sprintf(`
-  if [ ! -e "${DEST_DIR}/%s.7z" ]; then
-    log '\e[32m▶\e[0m %s => %s'
-    7z a %s "${DEST_DIR}/%s.7z" \
-      `,
-		archive.Name,
-		group.Name, archive.Name,
-		strings.Join(options, " "), archive.Name,
-	))
-
 	files := []string{}
 	for _, f := range archive.Files {
 		files = append(files, helpers.Quote(f))
@@ -36,6 +19,40 @@ func Build7z(archive domain.Archive, group domain.Group) string {
 	for _, x := range archive.Rexclude {
 		files = append(files, "-xr!"+helpers.Quote(x))
 	}
+	for _, i := range archive.Include {
+		files = append(files, "-i!"+helpers.Quote(i))
+	}
+	for _, i := range archive.Rinclude {
+		files = append(files, "-ir!"+helpers.Quote(i))
+	}
+
+	if len(files) == 0 {
+		return ""
+	}
+
+	var src []string
+
+	options := []string{"-t7z", "-bso0"}
+	if archive.Method != nil && archive.Method.Level != nil {
+		options = append(options, fmt.Sprintf("-mx%d", *archive.Method.Level))
+	}
+
+	cmd := "7z"
+	if archive.Cwd != "" {
+		cmd = "cd " + helpers.Quote(archive.Cwd) + " && " + cmd
+	}
+
+	src = append(src, fmt.Sprintf(`
+  if [ ! -e "${DEST_DIR}/%s.7z" ]; then
+    log '\e[32m▶\e[0m %s => %s'
+    %s a %s \
+      "${DEST_DIR}/%s.7z" \
+      `,
+		archive.Name,
+		group.Name, archive.Name,
+		cmd, strings.Join(options, " "),
+		archive.Name,
+	))
 
 	src = append(src, strings.Join(files, " \\\n      "))
 	src = append(src, `

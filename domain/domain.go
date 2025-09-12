@@ -13,10 +13,13 @@ type Group struct {
 type Archive struct {
 	Name     string   `json:"name" yaml:"name"`
 	Type     string   `json:"type" yaml:"type"`
+	Cwd      string   `json:"cwd" yaml:"cwd"`
 	Method   *Method  `json:"method,omitempty" yaml:"method,omitempty"`
 	Files    []string `json:"files" yaml:"files"`
 	Exclude  []string `json:"exclude,omitempty" yaml:"exclude,omitempty"`
 	Rexclude []string `json:"rexclude,omitempty" yaml:"rexclude,omitempty"`
+	Include  []string `json:"include,omitempty" yaml:"include,omitempty"`
+	Rinclude []string `json:"rinclude,omitempty" yaml:"rinclude,omitempty"`
 }
 
 type Method struct {

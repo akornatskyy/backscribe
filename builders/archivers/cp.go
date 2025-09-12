@@ -9,6 +9,10 @@ import (
 )
 
 func BuildCopy(archive domain.Archive, group domain.Group) string {
+	if len(archive.Files) == 0 {
+		return ""
+	}
+	
 	files := make([]string, len(archive.Files))
 	for i, f := range archive.Files {
 		files[i] = helpers.Quote(f)
