@@ -50,9 +50,33 @@ func BuildTar(archive domain.Archive, group domain.Group) string {
 	src = append(src, strings.Join(files, " \\\n      "))
 	src = append(src, `
   else
-    log '\e[33m↷\e[0m `+group.Name+` => `+archive.Name+`'
+    log '\e[32m↻\e[0m `+group.Name+` => `+archive.Name+`'`)
+	src = append(src, fmt.Sprintf(`
+    rm -f "${DEST_DIR}/%s.up.tar.tmp"`, archive.Name))
+	src = append(src, fmt.Sprintf(`
+    %s u -ttar -bso0 \
+      "${DEST_DIR}/%s.tar" -u- \
+      -up0q3x2y2z0!"${DEST_DIR}/%s.up.tar.tmp" \
+      `,
+		cmd,
+		archive.Name,
+		archive.Name))
+	src = append(src, strings.Join(files, " \\\n      "))
+	src = append(src, fmt.Sprintf(`
+    if [ "$(stat -c%%s "${DEST_DIR}/%s.up.tar.tmp")" -ne 1024 ]; then
+      mv "${DEST_DIR}/%s.up.tar.tmp" \
+        "${DEST_DIR}/%s.up.tar"
+    else
+      echo -n -e "\e[1A\e[K"
+      log '\e[33m↷\e[0m %s => %s'
+      rm "${DEST_DIR}/%s.up.tar.tmp"
+    fi
   fi
-`)
+`, archive.Name,
+		archive.Name,
+		archive.Name,
+		group.Name, archive.Name,
+		archive.Name))
 
 	return strings.Join(src, "")
 }
