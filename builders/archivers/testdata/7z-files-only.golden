@@ -1,0 +1,24 @@
+
+  if [ ! -e "${DEST_DIR}/files-only.7z" ]; then
+    log '\e[32m▶\e[0m group1 => files-only'
+    7z a -t7z -bso0 \
+      "${DEST_DIR}/files-only.7z" \
+      "file 1.txt" \
+      file2.txt
+  else
+    log '\e[32m↻\e[0m group1 => files-only'
+    rm -f "${DEST_DIR}/files-only.up.7z.tmp"
+    7z u -t7z -bso0 \
+      "${DEST_DIR}/files-only.7z" -u- \
+      -up0q3x2y2z0!"${DEST_DIR}/files-only.up.7z.tmp" \
+      "file 1.txt" \
+      file2.txt
+    if [ "$(stat -c%s "${DEST_DIR}/files-only.up.7z.tmp")" -ne 32 ]; then
+      mv "${DEST_DIR}/files-only.up.7z.tmp" \
+        "${DEST_DIR}/files-only.up.7z"
+    else
+      echo -n -e "\e[1A\e[K"
+      log '\e[33m↷\e[0m group1 => files-only'
+      rm "${DEST_DIR}/files-only.up.7z.tmp"
+    fi
+  fi

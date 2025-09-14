@@ -1,7 +1,9 @@
-package helpers
+package helpers_test
 
 import (
 	"testing"
+
+	"github.com/akornatskyy/backscribe/builders/archivers/helpers"
 )
 
 func TestQuote(t *testing.T) {
@@ -49,7 +51,7 @@ func TestQuote(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := Quote(tt.input)
+			result := helpers.Quote(tt.input)
 			if result != tt.expected {
 				t.Errorf("Quote(%q) = %q; expected %q", tt.input, result, tt.expected)
 			}

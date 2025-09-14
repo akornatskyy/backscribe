@@ -1,0 +1,34 @@
+
+  if [ ! -e "${DEST_DIR}/full.tar" ]; then
+    log '\e[32m▶\e[0m group2 => full'
+    cd "/project path" && 7z a -ttar -bso0 \
+      "${DEST_DIR}/full.tar" \
+      "file 1.txt" \
+      file2.txt \
+      -x!temp/ \
+      -x!*.tmp \
+      -xr!logs/** \
+      -i!*.go \
+      -ir!**/*.md
+  else
+    log '\e[32m↻\e[0m group2 => full'
+    rm -f "${DEST_DIR}/full.up.tar.tmp"
+    cd "/project path" && 7z u -ttar -bso0 \
+      "${DEST_DIR}/full.tar" -u- \
+      -up0q3x2y2z0!"${DEST_DIR}/full.up.tar.tmp" \
+      "file 1.txt" \
+      file2.txt \
+      -x!temp/ \
+      -x!*.tmp \
+      -xr!logs/** \
+      -i!*.go \
+      -ir!**/*.md
+    if [ "$(stat -c%s "${DEST_DIR}/full.up.tar.tmp")" -ne 1024 ]; then
+      mv "${DEST_DIR}/full.up.tar.tmp" \
+        "${DEST_DIR}/full.up.tar"
+    else
+      echo -n -e "\e[1A\e[K"
+      log '\e[33m↷\e[0m group2 => full'
+      rm "${DEST_DIR}/full.up.tar.tmp"
+    fi
+  fi
