@@ -1,0 +1,10 @@
+
+  if [ ! -d "${DEST_DIR}/full" ]; then
+    log '\e[32m▶\e[0m group2 => full'
+    mkdir -p "${DEST_DIR}/full"
+    cd "/project path" && cp -a -n -t "${DEST_DIR}/full" \
+      "file 1.txt" \
+      file2.txt
+  else
+    log '\e[33m↷\e[0m group2 => full'
+  fi

@@ -9,22 +9,28 @@ import (
 )
 
 func BuildCopy(archive domain.Archive, group domain.Group) string {
-	if len(archive.Files) == 0 {
-		return ""
-	}
-
 	files := make([]string, len(archive.Files))
 	for i, f := range archive.Files {
 		if f != "" {
 			files[i] = helpers.Quote(f)
 		}
 	}
+	if len(files) == 0 {
+		return ""
+	}
+
+	var cmd string
+	if archive.Cwd != "" {
+		cmd = fmt.Sprintf("cd %s && cp", helpers.Quote(archive.Cwd))
+	} else {
+		cmd = "cp"
+	}
 
 	return fmt.Sprintf(`
   if [ ! -d "${DEST_DIR}/%s" ]; then
     log '\e[32m▶\e[0m %s => %s'
     mkdir -p "${DEST_DIR}/%s"
-    cp -a -n -t "${DEST_DIR}/%s" \
+    %s -a -n -t "${DEST_DIR}/%s" \
       %s
   else
     log '\e[33m↷\e[0m %s => %s'
@@ -33,7 +39,7 @@ func BuildCopy(archive domain.Archive, group domain.Group) string {
 		archive.Name,
 		group.Name, archive.Name,
 		archive.Name,
-		archive.Name,
+		cmd, archive.Name,
 		strings.Join(files, " \\\n      "),
 		group.Name, archive.Name)
 }

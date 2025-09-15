@@ -181,6 +181,10 @@
                       "type": "string",
                       "description": "Name of the resulting directory."
                     },
+                    "cwd": {
+                      "type": "string",
+                      "description": "Current working directory."
+                    },
                     "files": {
                       "type": "array",
                       "description": "List of file paths to copy.",

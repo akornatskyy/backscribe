@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/akornatskyy/backscribe/domain"
 	"github.com/akornatskyy/backscribe/builders/archivers"
+	"github.com/akornatskyy/backscribe/domain"
 )
 
 func TestBuildCopy_Empty(t *testing.T) {
@@ -29,6 +29,15 @@ func TestBuildCopy_GoldenCases(t *testing.T) {
 				Files: []string{"file 1.txt", "file2.txt"},
 			},
 			group: domain.Group{Name: "group1"},
+		},
+		{
+			name: "full",
+			archive: domain.Archive{
+				Name:  "full",
+				Cwd:   "/project path",
+				Files: []string{"file 1.txt", "file2.txt"},
+			},
+			group: domain.Group{Name: "group2"},
 		},
 	}
 
