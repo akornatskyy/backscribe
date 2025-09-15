@@ -9,60 +9,31 @@ import (
 )
 
 func BuildTar(archive domain.Archive, group domain.Group) string {
-	files := []string{}
-	for _, f := range archive.Files {
-		files = append(files, helpers.Quote(f))
-	}
-	for _, x := range archive.Exclude {
-		files = append(files, "-x!"+helpers.Quote(x))
-	}
-	for _, x := range archive.Rexclude {
-		files = append(files, "-xr!"+helpers.Quote(x))
-	}
-	for _, i := range archive.Include {
-		files = append(files, "-i!"+helpers.Quote(i))
-	}
-	for _, i := range archive.Rinclude {
-		files = append(files, "-ir!"+helpers.Quote(i))
-	}
-
-	if len(files) == 0 {
+	args := helpers.Build7zArgsFromArchive(archive)
+	if len(args) == 0 {
 		return ""
 	}
 
-	cmd := "7z"
+	var cmd string
 	if archive.Cwd != "" {
-		cmd = "cd " + helpers.Quote(archive.Cwd) + " && " + cmd
+		cmd = fmt.Sprintf("cd %s && 7z", helpers.Quote(archive.Cwd))
+	} else {
+		cmd = "7z"
 	}
 
-	src := []string{fmt.Sprintf(`
+	return fmt.Sprintf(`
   if [ ! -e "${DEST_DIR}/%s.tar" ]; then
     log '\e[32m▶\e[0m %s => %s'
     %s a -ttar -bso0 \
       "${DEST_DIR}/%s.tar" \
-      `,
-		archive.Name,
-		group.Name, archive.Name,
-		cmd,
-		archive.Name,
-	)}
-
-	src = append(src, strings.Join(files, " \\\n      "))
-	src = append(src, `
+      %s
   else
-    log '\e[32m↻\e[0m `+group.Name+` => `+archive.Name+`'`)
-	src = append(src, fmt.Sprintf(`
-    rm -f "${DEST_DIR}/%s.up.tar.tmp"`, archive.Name))
-	src = append(src, fmt.Sprintf(`
+    log '\e[32m↻\e[0m %s => %s'
+    rm -f "${DEST_DIR}/%s.up.tar.tmp"
     %s u -ttar -bso0 \
       "${DEST_DIR}/%s.tar" -u- \
       -up0q3x2y2z0!"${DEST_DIR}/%s.up.tar.tmp" \
-      `,
-		cmd,
-		archive.Name,
-		archive.Name))
-	src = append(src, strings.Join(files, " \\\n      "))
-	src = append(src, fmt.Sprintf(`
+      %s
     if [ "$(stat -c%%s "${DEST_DIR}/%s.up.tar.tmp")" -ne 1024 ]; then
       mv "${DEST_DIR}/%s.up.tar.tmp" \
         "${DEST_DIR}/%s.up.tar"
@@ -72,11 +43,32 @@ func BuildTar(archive domain.Archive, group domain.Group) string {
       rm "${DEST_DIR}/%s.up.tar.tmp"
     fi
   fi
-`, archive.Name,
+`,
+		archive.Name,
+		group.Name, archive.Name,
+		cmd,
+		archive.Name,
+		strings.Join(args, " \\\n      "),
+		group.Name, archive.Name,
+		archive.Name,
+		cmd,
+		archive.Name,
+		archive.Name, strings.Join(args, " \\\n      "),
+		archive.Name,
 		archive.Name,
 		archive.Name,
 		group.Name, archive.Name,
-		archive.Name))
+		archive.Name,
+	)
+}
 
-	return strings.Join(src, "")
+type TarBuilder struct{}
+
+func (b TarBuilder) Build(
+	archive domain.Archive, group domain.Group) string {
+	return BuildTar(archive, group)
+}
+
+func init() {
+	RegisterBuilder("tar", TarBuilder{})
 }

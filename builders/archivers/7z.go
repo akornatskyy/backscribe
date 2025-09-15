@@ -9,67 +9,36 @@ import (
 )
 
 func Build7z(archive domain.Archive, group domain.Group) string {
-	files := []string{}
-	for _, f := range archive.Files {
-		files = append(files, helpers.Quote(f))
-	}
-	for _, x := range archive.Exclude {
-		files = append(files, "-x!"+helpers.Quote(x))
-	}
-	for _, x := range archive.Rexclude {
-		files = append(files, "-xr!"+helpers.Quote(x))
-	}
-	for _, i := range archive.Include {
-		files = append(files, "-i!"+helpers.Quote(i))
-	}
-	for _, i := range archive.Rinclude {
-		files = append(files, "-ir!"+helpers.Quote(i))
-	}
-
-	if len(files) == 0 {
+	args := helpers.Build7zArgsFromArchive(archive)
+	if len(args) == 0 {
 		return ""
 	}
 
-	var src []string
+	var cmd string
+	if archive.Cwd != "" {
+		cmd = fmt.Sprintf("cd %s && 7z", helpers.Quote(archive.Cwd))
+	} else {
+		cmd = "7z"
+	}
 
 	options := []string{"-t7z", "-bso0"}
 	if archive.Method != nil && archive.Method.Level != nil {
 		options = append(options, fmt.Sprintf("-mx%d", *archive.Method.Level))
 	}
 
-	cmd := "7z"
-	if archive.Cwd != "" {
-		cmd = "cd " + helpers.Quote(archive.Cwd) + " && " + cmd
-	}
-
-	src = append(src, fmt.Sprintf(`
+	return fmt.Sprintf(`
   if [ ! -e "${DEST_DIR}/%s.7z" ]; then
     log '\e[32m▶\e[0m %s => %s'
     %s a %s \
       "${DEST_DIR}/%s.7z" \
-      `,
-		archive.Name,
-		group.Name, archive.Name,
-		cmd, strings.Join(options, " "),
-		archive.Name,
-	))
-
-	src = append(src, strings.Join(files, " \\\n      "))
-	src = append(src, `
+      %s
   else
-    log '\e[32m↻\e[0m `+group.Name+` => `+archive.Name+`'`)
-	src = append(src, fmt.Sprintf(`
-    rm -f "${DEST_DIR}/%s.up.7z.tmp"`, archive.Name))
-	src = append(src, fmt.Sprintf(`
+    log '\e[32m↻\e[0m %s => %s'
+    rm -f "${DEST_DIR}/%s.up.7z.tmp"
     %s u %s \
       "${DEST_DIR}/%s.7z" -u- \
       -up0q3x2y2z0!"${DEST_DIR}/%s.up.7z.tmp" \
-      `,
-		cmd, strings.Join(options, " "),
-		archive.Name,
-		archive.Name))
-	src = append(src, strings.Join(files, " \\\n      "))
-	src = append(src, fmt.Sprintf(`
+      %s
     if [ "$(stat -c%%s "${DEST_DIR}/%s.up.7z.tmp")" -ne 32 ]; then
       mv "${DEST_DIR}/%s.up.7z.tmp" \
         "${DEST_DIR}/%s.up.7z"
@@ -79,11 +48,31 @@ func Build7z(archive domain.Archive, group domain.Group) string {
       rm "${DEST_DIR}/%s.up.7z.tmp"
     fi
   fi
-`, archive.Name,
-		archive.Name,
+`,
 		archive.Name,
 		group.Name, archive.Name,
-		archive.Name))
+		cmd, strings.Join(options, " "),
+		archive.Name,
+		strings.Join(args, " \\\n      "),
+		group.Name, archive.Name,
+		archive.Name,
+		cmd, strings.Join(options, " "),
+		archive.Name,
+		archive.Name, strings.Join(args, " \\\n      "),
+		archive.Name, archive.Name,
+		archive.Name,
+		group.Name, archive.Name,
+		archive.Name,
+	)
+}
 
-	return strings.Join(src, "")
+type SevenZipBuilder struct{}
+
+func (b SevenZipBuilder) Build(
+	archive domain.Archive, group domain.Group) string {
+	return Build7z(archive, group)
+}
+
+func init() {
+	RegisterBuilder("7z", SevenZipBuilder{})
 }

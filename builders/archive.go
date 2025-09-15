@@ -6,14 +6,9 @@ import (
 )
 
 func BuildArchive(archive domain.Archive, group domain.Group) string {
-	switch archive.Type {
-	case "7z":
-		return archivers.Build7z(archive, group)
-	case "tar":
-		return archivers.BuildTar(archive, group)
-	case "cp":
-		return archivers.BuildCopy(archive, group)
-	default:
+	builder := archivers.GetBuilder(archive.Type)
+	if builder == nil {
 		return ""
 	}
+	return builder.Build(archive, group)
 }

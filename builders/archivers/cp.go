@@ -12,10 +12,12 @@ func BuildCopy(archive domain.Archive, group domain.Group) string {
 	if len(archive.Files) == 0 {
 		return ""
 	}
-	
+
 	files := make([]string, len(archive.Files))
 	for i, f := range archive.Files {
-		files[i] = helpers.Quote(f)
+		if f != "" {
+			files[i] = helpers.Quote(f)
+		}
 	}
 
 	return fmt.Sprintf(`
@@ -27,10 +29,22 @@ func BuildCopy(archive domain.Archive, group domain.Group) string {
   else
     log '\e[33m↷\e[0m %s => %s'
   fi
-`, archive.Name,
+`,
+		archive.Name,
 		group.Name, archive.Name,
 		archive.Name,
 		archive.Name,
 		strings.Join(files, " \\\n      "),
 		group.Name, archive.Name)
+}
+
+type CopyBuilder struct{}
+
+func (b CopyBuilder) Build(
+	archive domain.Archive, group domain.Group) string {
+	return BuildCopy(archive, group)
+}
+
+func init() {
+	RegisterBuilder("cp", CopyBuilder{})
 }
