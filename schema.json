@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
+  "title": "Backscribe Config",
   "description": "Backscribe configuration file schema for defining archive groups and their operations.",
   "properties": {
     "$schema": {

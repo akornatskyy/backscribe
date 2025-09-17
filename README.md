@@ -101,7 +101,26 @@ groups:
 
 ## Visual Studio Code
 
-See `.vscode/settings.json` for enabling schema validation, auto-completion, and hover tooltips with documentation for *backscribe* files.
+To enable schema validation, auto-completion, and hover tooltips with documentation for *backscribe* files:
+
+```json
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["backscribe.json", ".backscribe.json"],
+      "url": "https://raw.githubusercontent.com/akornatskyy/backscribe/refs/heads/main/schema.json"
+    }
+  ],
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/akornatskyy/backscribe/refs/heads/main/schema.json": [
+      "backscribe.yaml",
+      "backscribe.yml",
+      ".backscribe.yaml",
+      ".backscribe.yml"
+    ]
+  }
+}
+```
 
 ## Building from Source
 
