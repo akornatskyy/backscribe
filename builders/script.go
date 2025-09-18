@@ -16,7 +16,8 @@ set -o errexit
 	src = append(src, fmt.Sprintf(`
 CONFIG_FILE=%s
 H=$(cd ~ ; (pwd -W 2>/dev/null || pwd) | sed 's/:\//:\/\//')
-DEST_DIR="${H}/backups/$(date '+%%Y-%%m-%%d')"
+: "${BACKSCRIBE_BACKUPS_DIR:="${H}/backups"}"
+DEST_DIR=${BACKSCRIBE_BACKUPS_DIR}
 START=$(date +%%s)
 `, strconv.Quote(configFile)))
 	src = append(src, `

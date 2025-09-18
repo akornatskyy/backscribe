@@ -39,6 +39,20 @@ If no config is specified, `backscribe` searches upward from the current directo
 
 It also checks `$HOME` and `$HOME/.config` directories.
 
+### Environment Variables
+
+#### `BACKSCRIBE_BACKUPS_DIR`
+
+Default: `~/backups`
+
+Specifies the destination directory for archive files. If set, this variable overrides the default location.
+
+```sh
+export BACKSCRIBE_BACKUPS_DIR="/mnt/storage/backups"
+```
+
+In this example, all archives will be written to `/mnt/storage/backups` instead of `~/backups`.
+
 ## Configuration Format
 
 Your configuration defines groups of file operations. Each group contains archives that describe what to back up or copy.
