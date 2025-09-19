@@ -7,11 +7,8 @@ import (
 	"github.com/akornatskyy/backscribe/domain"
 )
 
-func BuildGroup(group domain.Group) string {
-	var b strings.Builder
-	b.Grow(1024 * len(group.Archives))
-
-	fmt.Fprintf(&b, "\nbackup_%s() {", sanitizeName(group.Name))
+func BuildGroup(b *strings.Builder, group domain.Group) {
+	fmt.Fprintf(b, "\nbackup_%s() {", sanitizeName(group.Name))
 	added := false
 	for _, archive := range group.Archives {
 		if chunk := BuildArchive(archive, group); chunk != "" {
@@ -23,8 +20,7 @@ func BuildGroup(group domain.Group) string {
 	if !added {
 		b.WriteString("\n  :\n")
 	}
-	b.WriteRune('}')
-	return b.String()
+	b.WriteString("}\n")
 }
 
 func sanitizeName(name string) string {
