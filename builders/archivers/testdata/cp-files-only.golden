@@ -2,9 +2,9 @@
   if [ ! -d "${DEST_DIR}/files-only" ]; then
     log '\e[32m▶\e[0m group1 => files-only'
     mkdir -p "${DEST_DIR}/files-only"
-    cp -a -n -t "${DEST_DIR}/files-only" \
-      "file 1.txt" \
-      file2.txt
   else
-    log '\e[33m↷\e[0m group1 => files-only'
+    log '\e[32m↻\e[0m group1 => files-only'
   fi
+  cp -a -u -t "${DEST_DIR}/files-only" \
+    "file 1.txt" \
+    file2.txt

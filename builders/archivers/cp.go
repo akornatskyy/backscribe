@@ -30,18 +30,18 @@ func BuildCopy(archive domain.Archive, group domain.Group) string {
   if [ ! -d "${DEST_DIR}/%s" ]; then
     log '\e[32m▶\e[0m %s => %s'
     mkdir -p "${DEST_DIR}/%s"
-    %s -a -n -t "${DEST_DIR}/%s" \
-      %s
   else
-    log '\e[33m↷\e[0m %s => %s'
+    log '\e[32m↻\e[0m %s => %s'
   fi
+  %s -a -u -t "${DEST_DIR}/%s" \
+    %s
 `,
 		archive.Name,
 		group.Name, archive.Name,
 		archive.Name,
+		group.Name, archive.Name,
 		cmd, archive.Name,
-		strings.Join(files, " \\\n      "),
-		group.Name, archive.Name)
+		strings.Join(files, " \\\n    "))
 }
 
 type CopyBuilder struct{}
