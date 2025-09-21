@@ -29,7 +29,7 @@ log() {
   SEC=$((ELAPSED %% 60))
   if [ "${MIN}" -lt 10 ]; then MIN="0${MIN}"; fi
   if [ "${SEC}" -lt 10 ]; then SEC="0${SEC}"; fi
-  echo -e "\033[90m${MIN}:${SEC}\033[0m" $1
+  printf '\033[90m%%s:%%s\033[0m %%b\n' "${MIN}" ${SEC} "$1"
 }
 `, strconv.Quote(configFile))
 

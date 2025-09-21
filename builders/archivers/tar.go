@@ -38,7 +38,7 @@ func BuildTar(archive domain.Archive, group domain.Group) string {
       mv "${DEST_DIR}/%s.up.tar.tmp" \
         "${DEST_DIR}/%s.up.tar"
     else
-      echo -n -e "\e[1A\e[K"
+      printf '\033[1A\033[K'
       log '\e[33m↷\e[0m %s => %s'
       rm "${DEST_DIR}/%s.up.tar.tmp"
     fi
