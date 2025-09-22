@@ -143,3 +143,42 @@ git clone https://github.com/akornatskyy/backscribe.git
 cd backscribe
 go build
 ```
+
+## Troubleshooting
+
+### Duplicate filename on disk
+
+If you see an error like this:
+
+```txt
+ERROR:
+Duplicate filename on disk:
+.bash_history
+.bash_history
+```
+
+it means the `7z` command tried to add the same file (in this case, `.bash_history`) more than once when creating the archive.
+
+This usually occurs because of how shell globbing patterns expand. For example, using `~/.*` will match:
+
+- `.` (the current directory)
+- `..` (the parent directory)
+- all hidden files (dotfiles)
+
+As a result, some files may be included multiple times or in overlapping ways, which causes the duplication error.
+
+Instead of `~/.*`, use a safer globbing pattern that excludes `.` and `..`. For example:
+
+```yaml
+groups:
+  - name: home
+    archives:
+      - type: 7z
+        name: dotfiles
+        files:
+          - ~/.[!.]*   # matches hidden files, but not '.' or '..'
+        exclude:
+          - .cache     # exclude large/unnecessary directories
+```
+
+This pattern ensures only actual hidden files are included, avoiding duplicates.
