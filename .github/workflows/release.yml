@@ -43,7 +43,7 @@ jobs:
           go build -o dist/$OUTPUT -ldflags "-s -w \
             -X github.com/akornatskyy/backscribe/cmd/cli.Version=${VERSION} \
             -X github.com/akornatskyy/backscribe/cmd/cli.GitCommit=${GIT_COMMIT} \
-            -X 'github.com/akornatskyy/backscribe/cmd/cli.BuildDate=${BUILD_DATE}'"
+            -X github.com/akornatskyy/backscribe/cmd/cli.BuildDate=${BUILD_DATE}"
 
       - uses: softprops/action-gh-release@v2
         with:
