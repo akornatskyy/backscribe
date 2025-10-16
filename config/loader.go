@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/akornatskyy/backscribe/domain"
-	"gopkg.in/yaml.v3"
+	"github.com/goccy/go-yaml"
 )
 
 func LoadConfig(path string) (*domain.Config, error) {
